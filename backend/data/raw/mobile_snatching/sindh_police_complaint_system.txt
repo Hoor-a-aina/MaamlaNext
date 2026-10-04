@@ -1,0 +1,33 @@
+SOURCE TITLE: IGP Complaint Management System Guide
+ORGANIZATION: Sindh Police
+SOURCE URL: https://igpcms.sindhpolice.gov.pk/assets/guide/IGP_CMS_Guide.pdf
+TOPIC: Police Complaints and FIR Non-Registration
+
+VERIFIED INFORMATION:
+
+Sindh Police operates an IGP Complaint Management System (IGP CMS)
+for registering and tracking complaints.
+
+The system covers complaints including:
+- Non-registration of FIR
+- Police misconduct
+- Other police-related complaints
+
+The official Sindh Police IGP CMS guide provides a complaint process
+through the system.
+
+The IGP Complaint Management System lists helpline 1715 for complaints.
+
+IMPORTANT LIMITATION:
+
+This source establishes the Sindh Police complaint-management process
+and the availability of the IGP CMS.
+
+It does not establish:
+- the complete procedure for reporting every type of crime
+- emergency response procedures
+- phone/IMEI blocking procedures
+- investigation or recovery timelines
+- specific legal conclusions
+
+Those claims must come from separate authoritative sources.
