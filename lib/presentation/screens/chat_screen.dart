@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme/app_theme.dart';
 import '../../data/models/incident_response_model.dart';
 import '../../data/services/api_service.dart';
 import '../widgets/chat_bubble.dart';
@@ -25,12 +26,30 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final List<String> _quickPrompts = [
     "📱 Mera mobile snatch hogya",
-    "👤 Meri behen missing hai",
-    "🚨 My phone was snatched",
+    "👤 Cyber fraud",
+    "🚨 Emergency: Phone snatched",
   ];
+
+  // Helper to detect if text contains native Urdu/Arabic script characters
+  bool _isUrduScript(String text) {
+    return RegExp(r'[\u0600-\u06FF]').hasMatch(text);
+  }
+
+  // Helper to check if text is primarily English
+  bool _isEnglish(String text) {
+    return RegExp(r'^[a-zA-Z0-9\s\p{P}]+$').hasMatch(text);
+  }
 
   void _sendMessage(String text) async {
     if (text.trim().isEmpty) return;
+
+    // Dynamically determine language based on user's script/input
+    String detectedLanguage = "roman_urdu"; // default fallback
+    if (_isUrduScript(text)) {
+      detectedLanguage = "urdu";
+    } else if (_isEnglish(text)) {
+      detectedLanguage = "english";
+    }
 
     setState(() {
       _messages.add({"isUser": true, "message": text});
@@ -40,7 +59,8 @@ class _ChatScreenState extends State<ChatScreen> {
     _controller.clear();
 
     try {
-      IncidentResponse response = await _apiService.analyzeIncident(text, "auto", "Sindh");
+      // Pass the dynamically detected language instead of a hardcoded string
+      IncidentResponse response = await _apiService.analyzeIncident(text, detectedLanguage, "Sindh");
       setState(() {
         _isLoading = false;
         _messages.add({
@@ -54,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
         _isLoading = false;
         _messages.add({
           "isUser": false,
-          "message": "Error connecting to service. Please check your connection.",
+          "message": "Error connecting to service. Details: $e",
         });
       });
     }
@@ -67,36 +87,60 @@ class _ChatScreenState extends State<ChatScreen> {
         (widget.currentThemeMode == ThemeMode.system && MediaQuery.platformBrightnessOf(context) == Brightness.dark);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("MaamlaNext", style: TextStyle(fontWeight: FontWeight.bold)),
-        actions: [
-          IconButton(
-            icon: Icon(isDark ? Icons.wb_sunny : Icons.nightlight_round),
-            onPressed: () {
-              // Toggle between Light and Dark mode
-              widget.onThemeChanged(isDark ? ThemeMode.light : ThemeMode.dark);
-            },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: AppTheme.tealMintGradient,
           ),
-        ],
+          child: AppBar(
+            title: const Text("MaamlaNext", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black87)),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: true,
+            actions: [
+              IconButton(
+                icon: Icon(isDark ? Icons.wb_sunny_rounded : Icons.nightlight_round, size: 20, color: Colors.black87),
+                onPressed: () {
+                  widget.onThemeChanged(isDark ? ThemeMode.light : ThemeMode.dark);
+                },
+              ),
+            ],
+          ),
+        ),
       ),
       body: Column(
         children: [
           Expanded(
             child: _messages.isEmpty
                 ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.security, size: 64, color: theme.colorScheme.primary.withValues(alpha: 0.5)),
-                  const SizedBox(height: 16),
-                  const Text("How can MaamlaNext assist you today?", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 8),
-                  const Text("Select a quick prompt below or type your incident.", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(22),
+                      decoration: const BoxDecoration(
+                        gradient: AppTheme.tealMintGradient,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.security_rounded, size: 48, color: Colors.black87),
+                    ),
+                    const SizedBox(height: 18),
+                    const Text("How can MaamlaNext assist you?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Text(
+                      "Instant legal guidance & emergency SOPs for Pakistan.",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
+                    ),
+                  ],
+                ),
               ),
             )
                 : ListView.builder(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.symmetric(vertical: 12),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 final msg = _messages[index];
@@ -104,39 +148,52 @@ class _ChatScreenState extends State<ChatScreen> {
                   isUser: msg["isUser"],
                   message: msg["message"],
                   responseData: msg["responseData"],
+                  onQuestionTap: (question) {
+                    // Automatically send the tapped follow-up question as a new user message
+                    _sendMessage(question);
+                  },
                 );
               },
             ),
           ),
           if (_isLoading)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2)),
-                  SizedBox(width: 8),
-                  Text("Consulting official SOPs & generating guidance...", style: TextStyle(fontSize: 12, color: Colors.grey)),
+                  const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2.5)),
+                  const SizedBox(width: 12),
+                  Text("Consulting official SOPs & generating guidance...", style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface.withValues(alpha: 0.7))),
                 ],
               ),
             ),
+
+          // Clean Horizontal Quick Action Chips (Optimized for all age groups)
           SizedBox(
-            height: 45,
+            height: 52,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               itemCount: _quickPrompts.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.only(right: 8),
                   child: ActionChip(
-                    label: Text(_quickPrompts[index], style: const TextStyle(fontSize: 12)),
+                    backgroundColor: theme.colorScheme.surface,
+                    label: Text(_quickPrompts[index], style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500, color: theme.colorScheme.onSurface)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      side: BorderSide(color: theme.colorScheme.primary.withValues(alpha: 0.4), width: 1.2),
+                    ),
                     onPressed: () => _sendMessage(_quickPrompts[index]),
                   ),
                 );
               },
             ),
           ),
+
+          // Polished Input Bar
           Container(
             padding: const EdgeInsets.all(12),
             color: theme.colorScheme.surface,
@@ -145,21 +202,26 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
+                    style: const TextStyle(fontSize: 15),
                     decoration: InputDecoration(
                       hintText: "Type incident in English or Roman Urdu...",
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: BorderSide.none),
+                      hintStyle: TextStyle(fontSize: 14, color: theme.colorScheme.onSurface.withValues(alpha: 0.4)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(28), borderSide: BorderSide.none),
                       filled: true,
-                      fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      fillColor: theme.colorScheme.surfaceContainerHighest,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
                     ),
                     onSubmitted: _sendMessage,
                   ),
                 ),
                 const SizedBox(width: 8),
-                CircleAvatar(
-                  backgroundColor: theme.colorScheme.primary,
+                Container(
+                  decoration: const BoxDecoration(
+                    gradient: AppTheme.tealMintGradient,
+                    shape: BoxShape.circle,
+                  ),
                   child: IconButton(
-                    icon: const Icon(Icons.send, color: Colors.white, size: 18),
+                    icon: const Icon(Icons.send_rounded, color: Colors.black87, size: 20),
                     onPressed: () => _sendMessage(_controller.text),
                   ),
                 ),

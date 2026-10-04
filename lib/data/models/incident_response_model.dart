@@ -34,7 +34,13 @@ class ActionItem {
   final String title;
   final String description;
   final String priority;
-  ActionItem({required this.title, required this.description, required this.priority});
+
+  ActionItem({
+    required this.title,
+    required this.description,
+    required this.priority,
+  });
+
   factory ActionItem.fromJson(Map<String, dynamic> json) => ActionItem(
     title: json['title'] ?? '',
     description: json['description'] ?? '',
@@ -46,7 +52,13 @@ class SourceItem {
   final String title;
   final String organization;
   final String url;
-  SourceItem({required this.title, required this.organization, required this.url});
+
+  SourceItem({
+    required this.title,
+    required this.organization,
+    required this.url,
+  });
+
   factory SourceItem.fromJson(Map<String, dynamic> json) => SourceItem(
     title: json['title'] ?? '',
     organization: json['organization'] ?? '',
