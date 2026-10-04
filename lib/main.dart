@@ -7,7 +7,7 @@ void main() {
 }
 
 class MaamlaNextApp extends StatefulWidget {
-  const MaamlaNextApp({Key? key}) : super(key: key);
+  const MaamlaNextApp({super.key}); // Cleaned up deprecated Key? key syntax
 
   @override
   State<MaamlaNextApp> createState() => _MaamlaNextAppState();
