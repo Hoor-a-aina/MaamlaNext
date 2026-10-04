@@ -1,0 +1,31 @@
+SOURCE TITLE: PTA Complaint Management System User Manual
+ORGANIZATION: Pakistan Telecommunication Authority (PTA)
+SOURCE URL: https://complaint.pta.gov.pk/Usermanual/User_Manual_CMS_Web.pdf
+TOPIC: Stolen Mobile Handset / IMEI Related Complaint
+
+VERIFIED INFORMATION:
+
+The PTA Complaint Management System provides a complaint category for
+"Stolen Mobile Handset / IMEI Related Complaint."
+
+The request/nature type can be Blocking or Unblocking.
+
+The complaint may require:
+- IMEI Slot 1
+- IMEI Slot 2
+- IMEI Slot 3
+- IMEI Slot 4
+- Last Number in Handset for the relevant slot
+- Brand
+
+The PTA manual states that complaints regarding stolen mobile handsets
+for blocking/unblocking can be registered through the online web portal.
+
+The complaint is routed to the relevant ICT department for blocking or
+unblocking of the device.
+
+IMPORTANT LIMITATION:
+This source establishes the PTA stolen-handset/IMEI complaint process.
+It does not establish police FIR procedures, emergency procedures,
+account-security procedures, or any specific recovery timeline.
+Those claims must come from separate authoritative sources.
