@@ -23,7 +23,6 @@ class IncidentResponse(BaseModel):
     situation: str
     jurisdiction: str
     summary: str
-    follow_up_questions: list[str]
     actions: list[Action]
     sources: list[Source]
     disclaimer: str

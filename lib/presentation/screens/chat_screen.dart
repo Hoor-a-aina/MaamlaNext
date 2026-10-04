@@ -26,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final List<String> _quickPrompts = [
     "📱 Mera mobile snatch hogya",
-    "👤 Cyber fraud",
+    "👤 Someone has illegally accessed my bank account and transferred money without my consent.",
     "🚨 Emergency: Phone snatched",
   ];
 
@@ -148,10 +148,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   isUser: msg["isUser"],
                   message: msg["message"],
                   responseData: msg["responseData"],
-                  onQuestionTap: (question) {
-                    // Automatically send the tapped follow-up question as a new user message
-                    _sendMessage(question);
-                  },
                 );
               },
             ),

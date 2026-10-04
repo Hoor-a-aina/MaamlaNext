@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import '../models/incident_response_model.dart';
 
 class ApiService {
-  // Point this to Safi's backend URL
+  // Point this to your backend URL
   static const String baseUrl = "http://10.0.2.2:8000";
 
   Future<IncidentResponse> analyzeIncident(String message, String language, String location) async {
@@ -24,7 +24,6 @@ class ApiService {
         throw Exception('Server error: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      // Throw the error directly so you see connection or parsing issues instead of falling back to mock English data
       throw Exception('Failed to connect to backend: $e');
     }
   }

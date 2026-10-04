@@ -128,53 +128,6 @@ class ChatBubble extends StatelessWidget {
                 ),
               ),
 
-              if (responseData!.followUpQuestions.isNotEmpty) ...[
-                const SizedBox(height: 16),
-                const Row(
-                  children: [
-                    Icon(Icons.help_outline_rounded, size: 16, color: Colors.amber),
-                    SizedBox(width: 6),
-                    Text(
-                      "Required Clarifications / Questions:",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.amber),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                ...responseData!.followUpQuestions.map((question) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: onQuestionTap != null ? () => onQuestionTap!(question) : null,
-                      borderRadius: BorderRadius.circular(8),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.amber.withValues(alpha: 0.3)),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                question,
-                                style: TextStyle(fontSize: 13, color: theme.colorScheme.onSurface, height: 1.3),
-                              ),
-                            ),
-                            if (onQuestionTap != null) ...[
-                              const SizedBox(width: 8),
-                              const Icon(Icons.arrow_forward_ios_rounded, size: 12, color: Colors.amber),
-                            ],
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )),
-              ],
-
               const SizedBox(height: 14),
               const Text(
                 "Recommended Actions:",

@@ -2,7 +2,6 @@ class IncidentResponse {
   final String situation;
   final String jurisdiction;
   final String summary;
-  final List<String> followUpQuestions;
   final List<ActionItem> actions;
   final List<SourceItem> sources;
   final String disclaimer;
@@ -11,7 +10,6 @@ class IncidentResponse {
     required this.situation,
     required this.jurisdiction,
     required this.summary,
-    required this.followUpQuestions,
     required this.actions,
     required this.sources,
     required this.disclaimer,
@@ -22,7 +20,6 @@ class IncidentResponse {
       situation: json['situation'] ?? '',
       jurisdiction: json['jurisdiction'] ?? '',
       summary: json['summary'] ?? '',
-      followUpQuestions: List<String>.from(json['follow_up_questions'] ?? []),
       actions: (json['actions'] as List? ?? []).map((x) => ActionItem.fromJson(x)).toList(),
       sources: (json['sources'] as List? ?? []).map((x) => SourceItem.fromJson(x)).toList(),
       disclaimer: json['disclaimer'] ?? '',
